@@ -1,0 +1,12 @@
+<h1 mat-dialog-title>Select Lesson</h1>
+<div mat-dialog-content>
+  <mat-selection-list #lessonsList>
+    <mat-list-option *ngFor="let lesson of data.lessons" [value]="lesson">
+      {{ lesson.name }}
+    </mat-list-option>
+  </mat-selection-list>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button (click)="onSelect(lessonsList.selectedOptions.selected)">Ok</button>
+</div>

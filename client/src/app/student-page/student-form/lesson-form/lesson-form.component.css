@@ -1,0 +1,21 @@
+.schedule table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.schedule th,
+.schedule td {
+  padding: 8px;
+  text-align: center;
+  border-right: 1px solid #ccc; /* Add a right border to create vertical lines */
+}
+
+.schedule th:last-child,
+.schedule td:last-child {
+  border-right: none; /* Remove the right border for the last column */
+}
+
+.schedule th,
+.schedule td {
+  border-bottom: 1px solid #ccc; /* Optional: Add a bottom border for better visibility */
+}

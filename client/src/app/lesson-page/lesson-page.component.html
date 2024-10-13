@@ -1,0 +1,148 @@
+<div class="page-title">
+  <h4>Предметы</h4>
+  <button class="waves-effect waves-light btn grey darken-1" (click)="openAddLessonModal()">Добавить предмет</button>
+</div>
+
+<div class="row" *ngIf="lessons$ | async as lessons; else loader">
+  <div class="col s12">
+    <div class="collection" *ngIf="lessons.length !== 0; else empty">
+      <div class="collection-header">
+        <div class="lesson-header name-header">Название</div>
+        <div class="lesson-header description-header">Описание</div>
+        <div class="lesson-header action-header">Действия</div>
+      </div>
+      <div *ngFor="let lesson of lessons" class="collection-item lesson-item">
+        <div class="lesson-name">{{ lesson.name }}</div>
+        <div class="lesson-description">{{ lesson.description }}</div>
+        <div class="lesson-actions">
+          <button class="btn btn-small red ar" (click)="deleteLesson(lesson)">
+            <i class="material-icons">delete</i>
+          </button>
+        </div>
+      </div>
+    </div>
+    <ng-template #empty>
+      <div class="center">
+        Отсутствуют предметы. Добавьте предметы в список
+      </div>
+    </ng-template>
+  </div>
+</div>
+
+<ng-template #loader>
+  <app-loader></app-loader>
+</ng-template>
+
+<!-- Modal Structure -->
+<div #addLessonModal id="addLessonModal" class="modal">
+  <div class="modal-content">
+    <h4>Добавить предмет</h4>
+    <form class="col s12 l6" [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="input-field">
+        <input id="name" type="text" formControlName="name" required>
+        <label for="name">Название предмета</label>
+        <span class="helper-text red-text" *ngIf="form.get('name')?.invalid && form.get('name')?.touched">
+          <span *ngIf="!!form.get('name')?.errors?.['required']">Заполните строку имя</span>
+        </span>
+      </div>
+      <div class="input-field">
+        <input id="description" type="text" formControlName="description" required>
+        <label for="description">Описание предмета</label>
+        <span class="helper-text red-text" *ngIf="form.get('description')?.invalid && form.get('description')?.touched">
+          <span *ngIf="!!form.get('description')?.errors?.['required']">Заполните строку описание</span>
+        </span>
+      </div>
+      <div>
+        <button type="submit" [disabled]="form.invalid || form.disabled" class="waves-effect waves-light btn">
+          Сохранить изменения
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+
+
+<!--<div class="page-title">-->
+<!--  <h4>Предметы</h4>-->
+<!--  <button class="waves-effect waves-light btn grey darken-1" (click)="openAddLessonModal()">Добавить предмет</button>-->
+<!--</div>-->
+
+<!--<div-->
+<!--  class="row"-->
+<!--  *ngIf = "lessons$ | async as lessons; else loader"-->
+<!--&gt;-->
+<!--  <div class="col s12">-->
+<!--    <div class="collection" *ngIf="lessons.length !==0; else empty">-->
+<!--      <a-->
+<!--        *ngFor="let lesson of lessons"-->
+<!--        [routerLink] = "['/lesson', lesson._id]"-->
+<!--        class="collection-item">-->
+<!--        {{lesson.name}} | {{lesson.description}}-->
+<!--        <span>-->
+<!--            <button class="btn btn-small red ar" (click)="deleteLesson(lesson)">-->
+<!--              <i class="material-icons">delete</i>-->
+<!--            </button>-->
+<!--        </span>-->
+<!--      </a>-->
+<!--    </div>-->
+<!--    <ng-template #empty>-->
+<!--      <div class="center">-->
+<!--        Отсутствуют предметы. Добавьте предметы в список-->
+<!--      </div>-->
+<!--    </ng-template>-->
+<!--  </div>-->
+<!--</div>-->
+
+<!--<ng-template #loader>-->
+<!--<app-loader></app-loader>-->
+<!--</ng-template>-->
+
+<!--&lt;!&ndash; Modal Structure &ndash;&gt;-->
+<!--&lt;!&ndash; Добавьте идентификатор для модального окна &ndash;&gt;-->
+<!--<div #addLessonModal id="addLessonModal" class="modal">-->
+<!--  <div class="modal-content">-->
+<!--    <h4>Добавить предмет</h4>-->
+<!--    <form class="col s12 l6" [formGroup]="form" (ngSubmit)="onSubmit()">-->
+<!--      <div class="input-field">-->
+<!--        <input id="name"-->
+<!--               type="text"-->
+<!--               formControlName="name"-->
+<!--               required>-->
+<!--        <label for="name">Название предмета</label>-->
+<!--        <span-->
+<!--          class="helper-text red-text"-->
+<!--          *ngIf = "form.get('name')?.invalid && form.get('name')?.touched"-->
+<!--        >-->
+<!--        <span *ngIf="!!form.get('name')?.errors?.['required']">-->
+<!--          Заполните строку имя-->
+<!--        </span>-->
+<!--      </span>-->
+<!--      </div>-->
+<!--      <div class="input-field">-->
+<!--        <input id="description"-->
+<!--               type="text"-->
+<!--               formControlName="description"-->
+<!--               required>-->
+<!--        <label for="description">Описание предмета</label>-->
+<!--        <span-->
+<!--          class="helper-text red-text"-->
+<!--          *ngIf="form.get('description')?.invalid && form.get('description')?.touched">-->
+<!--          <span *ngIf="!!form.get('description')?.errors?.['required']"-->
+<!--          >Заполните строку описание-->
+<!--          </span>-->
+<!--        </span>-->
+<!--      </div>-->
+<!--      <div>-->
+<!--        <button-->
+<!--          type="submit"-->
+<!--          [disabled]="form.invalid || form.disabled"-->
+<!--          class="waves-effect waves-light btn">-->
+<!--          Сохранить изменения-->
+<!--        </button>-->
+<!--      </div>-->
+<!--    </form>-->
+<!--  </div>-->
+<!--</div>-->
+

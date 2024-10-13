@@ -1,0 +1,52 @@
+<div class="schedule">
+  <table>
+    <thead>
+    <tr>
+      <th></th>
+      <th *ngFor="let day of days">{{ day }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let time of times">
+      <td>{{ time }}</td>
+      <td *ngFor="let day of days">
+        <div class="waves-effect waves-light btn-small darken-1" (click)="openSchedule(day, time)">{{ getLesson(day, time) || '-' }}</div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+
+<!--<div #schedule id="schedule" class="modal">-->
+<!--  <div class="modal-content">-->
+<!--    <h4>Добавить предмет</h4>-->
+<!--    <form class="col s12 l6" [formGroup]="form" (ngSubmit)="onSubmit()">-->
+<!--      <div class="input-field">-->
+<!--        <input id="name"-->
+<!--               type="text"-->
+<!--               formControlName="name"-->
+<!--               required>-->
+<!--        <label for="name">Название предмета</label>-->
+<!--        <span-->
+<!--          class="helper-text red-text"-->
+<!--          *ngIf = "form.get('name')?.invalid && form.get('name')?.touched"-->
+<!--        >-->
+<!--        <span *ngIf="!!form.get('name')?.errors?.['required']">-->
+<!--          Заполните строку имя-->
+<!--        </span>-->
+<!--      </span>-->
+<!--      </div>-->
+<!--      <div>-->
+<!--        <button-->
+<!--          type="submit"-->
+<!--          [disabled]="form.invalid || form.disabled"-->
+<!--          class="waves-effect waves-light btn">-->
+<!--          Сохранить изменения-->
+<!--        </button>-->
+<!--      </div>-->
+<!--    </form>-->
+<!--  </div>-->
+<!--</div>-->
+
+

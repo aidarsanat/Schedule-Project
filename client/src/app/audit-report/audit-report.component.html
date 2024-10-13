@@ -1,0 +1,483 @@
+<ngx-spinner
+  bdColor="rgba(51,51,51,0.4)"
+  size="medium"
+  color="#fff"
+  type="ball-scale-multiple"
+>
+  <p style="font-size: 20px; color: white">Loading...</p>
+</ngx-spinner>
+
+<!-- report-params.component.html -->
+<section class="report-params">
+  <h1 class="page-head-underline">
+    <strong>Отчёт по данным аудита</strong>
+  </h1>
+  <h3>Параметры запуска отчета:</h3>
+  <form class="audit-form">
+    <!--    1 строка-->
+    <div class="q-input-group">
+      <!--    <div class="input-group d-flex p-2">-->
+      <!--      <label for="system_name">system_name</label>-->
+      <p-dropdown [options]="system_name"
+                  [(ngModel)]="selectedSystemName"
+                  optionLabel="name"
+                  (onChange)="onSystemNameChange()"
+                  [showClear]="true"
+                  id="system_name"
+                  [style]="{'width':'90%'}"
+                  placeholder="Выберите system_name">
+      </p-dropdown>
+    </div>
+
+    <div class="q-input-group">
+      <!--      <label for="object_name">object_name</label>-->
+      <p-dropdown [options]="objects"
+                  [(ngModel)]="selectedObjectName"
+                  [showClear]="true"
+                  id="object_name"
+                  [style]="{'width':'90%'}"
+                  placeholder="Выберите object_name">
+      </p-dropdown>
+    </div>
+
+    <div class="q-input-group">
+      <!--      <label for="data_code">data_code</label>-->
+      <p-dropdown
+        [options]="data_code"
+        [(ngModel)]="selectedDataCode"
+        placeholder="Выберите data_code"
+        [editable]="true"
+        id="data_code"
+        [style]="{'width':'90%'}"
+        optionLabel="data_code"/>
+    </div>
+
+    <!--    2 строка-->
+
+    <div class="q-input-group">
+      <p-floatLabel>
+        <p-calendar
+          [(ngModel)]="date_begin"
+          id="date_begin"
+          [style]="{'width':'90%'}"
+          [showClear]="true"
+          [showIcon]="true"
+          showButtonBar="true"
+          placeholder="Выберите object_name"/>
+        <label for="date_begin">date_begin</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="q-input-group">
+      <p-floatLabel>
+        <p-calendar
+          [(ngModel)]="date_end"
+          id="date_end"
+          [style]="{'width':'90%'}"
+          [showClear]="true"
+          [showIcon]="true"
+          showButtonBar="true"/>
+        <label for="date_end">date_end</label>
+      </p-floatLabel>
+    </div>
+
+
+    <div class="button-group">
+      <button type="button" class="reset-button">Сброс</button>
+      <button type="submit" class="submit-button">Запустить отчет</button>
+    </div>
+  </form>
+</section>
+
+<section class="report-history">
+  <h3>История запуска отчета <i class="pi-question-circle"></i>
+  </h3>
+</section>
+
+<div class="card">
+  <p-table
+    #dt
+    [value]="system_name"
+    dataKey="id"
+    [rows]="10"
+    [rowsPerPageOptions]="[10, 20, 50]"
+    [paginator]="true"
+    [globalFilterFields]="['user', 'system_name', 'object_name', 'data_code', 'date_begin', 'date_end']"
+  >
+    <ng-template pTemplate="header">
+      <tr class="header-text">
+        <th>
+          <div class="flex align-items-center">
+            Дата запуска
+            <p-columnFilter type="date" field="date_launch" display="menu" class="header-line"></p-columnFilter>
+          </div>
+        </th>
+        <th>
+          <div class="flex align-items-center">
+            user
+            <p-columnFilter type="text" field="user" display="menu"></p-columnFilter>
+          </div>
+        </th>
+        <th>
+          <div class="flex align-items-center">
+            system_name
+            <p-columnFilter type="text" field="system_name" display="menu"></p-columnFilter>
+          </div>
+        </th>
+        <th>
+          <div class="flex align-items-center">
+            object_name
+            <p-columnFilter type="text" field="object_name" display="menu"></p-columnFilter>
+          </div>
+        </th>
+        <th>
+          <div class="flex align-items-center">
+            data_code
+            <p-columnFilter type="numeric" field="data_code" display="menu"></p-columnFilter>
+          </div>
+        </th>
+        <th>
+          <div class="flex align-items-center">
+            date_begin
+            <p-columnFilter type="date" field="date_begin" display="menu"></p-columnFilter>
+          </div>
+        </th>
+        <th>
+          <div class="flex align-items-center">
+            date_end
+            <p-columnFilter type="date" field="date_end" display="menu"></p-columnFilter>
+          </div>
+        </th>
+        <th>
+          <div class="flex align-items-center">
+            Статус
+            <p-columnFilter type="text" field="status" display="menu"></p-columnFilter>
+          </div>
+        </th>
+        <th>
+          <div class="flex align-items-center">
+            Скачать
+          </div>
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-report>
+      <tr>
+        <td>{{ report.date_launch | date: 'dd.MM.yyyy HH:mm:ss' }}</td>
+        <td>{{ report.user }}</td>
+        <td>{{ report.system_name }}</td>
+        <td>{{ report.object_name }}</td>
+        <td>{{ report.data_code }}</td>
+        <td>{{ report.date_begin | date: 'dd.MM.yyyy HH:mm:ss' }}</td>
+        <td>{{ report.date_end | date: 'dd.MM.yyyy HH:mm:ss' }}</td>
+        <td>
+          <i class="pi" [ngClass]="{
+                        'pi-check-circle text-green-500': report.status === 'success',
+                        'pi-times-circle text-red-500': report.status === 'failed'
+                    }"></i>
+        </td>
+        <td>
+          <button pButton type="button" icon="pi pi-download" class="p-button-rounded p-button-success"></button>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="9">No reports found.</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+
+
+<!--&lt;!&ndash; src/app/audit-report/audit-report.component.html &ndash;&gt;-->
+<!--<section class="report-params">-->
+<!--  <h1 class="head-line">Отчёт по данным аудита</h1>-->
+<!--  <h3>Параметры запуска отчета</h3>-->
+<!--  <form (ngSubmit)="onSubmit()">-->
+<!--    &lt;!&ndash; 1 строка &ndash;&gt;-->
+<!--    <div class="input-group">-->
+<!--      <p-multiselect [(ngModel)]="auditReport.system_name" name="system_name" placeholder="Выберите system_name"></p-multiselect>-->
+<!--      <button type="button" class="clear-button" (click)="clearField()">x</button>-->
+<!--    </div>-->
+<!--    <div class="input-group">-->
+<!--      <p-multiselect [(ngModel)]="auditReport.object_name" name="object_name" placeholder="Выберите object_name"></p-multiselect>-->
+<!--      <button type="button" class="clear-button" (click)="clearField()">x</button>-->
+<!--    </div>-->
+<!--    <div class="input-group">-->
+<!--      <input id="data_code" name="data_code" placeholder="Data Code" [(ngModel)]="auditReport.data_code">-->
+<!--      <button type="button" class="clear-button" (click)="clearField()">x</button>-->
+<!--    </div>-->
+<!--    &lt;!&ndash; 2 строка &ndash;&gt;-->
+<!--    <div class="input-group">-->
+<!--      <p-calendar [(ngModel)]="auditReport.date_begin" name="date_begin" placeholder="Date Begin" dateFormat="dd.mm.yy"></p-calendar>-->
+<!--      <button type="button" class="clear-button" (click)="clearField()">x</button>-->
+<!--    </div>-->
+<!--    <div class="input-group">-->
+<!--      <p-calendar [(ngModel)]="auditReport.date_end" name="date_end" placeholder="Date End" dateFormat="dd.mm.yy"></p-calendar>-->
+<!--      <button type="button" class="clear-button" (click)="clearField()">x</button>-->
+<!--    </div>-->
+<!--    <div class="button-group">-->
+<!--      <button type="button" class="reset-button" (click)="onReset()">Сброс</button>-->
+<!--      <button type="submit" class="submit-button">Запустить отчет</button>-->
+<!--    </div>-->
+<!--  </form>-->
+<!--</section>-->
+
+<!--<div class="card">-->
+<!--  <p-table [value]="auditReports">-->
+<!--    <ng-template pTemplate="header">-->
+<!--      <tr>-->
+<!--        <th>Дата запуска</th>-->
+<!--        <th>User</th>-->
+<!--        <th>System Name</th>-->
+<!--        <th>Object Name</th>-->
+<!--        <th>Data Code</th>-->
+<!--        <th>Date Begin</th>-->
+<!--        <th>Date End</th>-->
+<!--        <th>Статус</th>-->
+<!--        <th>Скачать</th>-->
+<!--      </tr>-->
+<!--    </ng-template>-->
+<!--    <ng-template pTemplate="body" let-report>-->
+<!--      <tr>-->
+<!--        <td>{{ report.dateBegin | date:'dd.MM.yyyy HH:mm:ss' }}</td>-->
+<!--        <td>{{ report.user }}</td>-->
+<!--        <td>{{ report.systemName }}</td>-->
+<!--        <td>{{ report.objectName }}</td>-->
+<!--        <td>{{ report.dataCode }}</td>-->
+<!--        <td>{{ report.dateBegin | date:'dd.MM.yyyy HH:mm:ss' }}</td>-->
+<!--        <td>{{ report.dateEnd | date:'dd.MM.yyyy HH:mm:ss' }}</td>-->
+<!--        <td>-->
+<!--          <i class="pi" [ngClass]="{'pi-check-circle': report.status === 'success', 'pi-times-circle': report.status === 'failure'}"></i>-->
+<!--        </td>-->
+<!--        <td>-->
+<!--          <button pButton icon="pi pi-download" (click)="downloadReport(report)"></button>-->
+<!--        </td>-->
+<!--      </tr>-->
+<!--    </ng-template>-->
+<!--  </p-table>-->
+<!--</div>-->
+
+
+<!--<ngx-spinner bdColor="rgba(51,51,51,0.4)"-->
+<!--             size="medium" color="#fff"-->
+<!--             type="ball-scale-multiple">-->
+<!--  <p style="font-size: 20px; color: white">Loading...</p>-->
+<!--</ngx-spinner>-->
+<!-- report-params.component.html -->
+<!--<section class="report-params">-->
+<!--  <h1 class="head-line">Отчёт по данным аудита</h1>-->
+<!--  <h1 class="head-line">Параметры запуска отчета</h1>-->
+<!--  <form>-->
+<!--    &lt;!&ndash;    1 строка&ndash;&gt;-->
+<!--    <div class="input-group">-->
+<!--      <label for="system_name">System Name</label>-->
+<!--      <select id="system_name" name="system_name">-->
+<!--        <option value="">Выберите system_name</option>-->
+<!--      </select></div>-->
+<!--    <div class="input-group">-->
+<!--      <label for="object_name">Object Name</label>-->
+<!--      <select id="object_name" name="object_name">-->
+<!--        <option value="">Выберите object_name</option>-->
+<!--      </select>-->
+<!--    </div>-->
+<!--    <div class="input-group">-->
+<!--      <label for="data_code">Data Code</label>-->
+<!--      <input id="data_code" name="data_code">-->
+<!--    </div>-->
+<!--    &lt;!&ndash;    2 строка&ndash;&gt;-->
+<!--    <div class="input-group">-->
+<!--      <label for="date_begin">Date Begin</label>-->
+<!--      <input id="date_begin" type="date" name="date_begin">-->
+<!--    </div>-->
+<!--    <div class="input-group">-->
+<!--      <label for="date_end">Date End</label>-->
+<!--      <input id="date_end" type="date" name="date_end">-->
+<!--    </div>-->
+<!--    <div class="button-group">-->
+<!--      <button type="button" class="reset-button">Сброс</button>-->
+<!--      <button type="submit" class="submit-button">Запустить отчет</button>-->
+<!--    </div>-->
+<!--  </form>-->
+<!--</section>-->
+
+
+<!--<div class="card">-->
+<!--  <p-table [value]="reports">-->
+<!--    <ng-template pTemplate="header">-->
+<!--      <tr>-->
+<!--        <th>System Name</th>-->
+<!--        <th>Object Name</th>-->
+<!--        <th>Data Code</th>-->
+<!--        <th>Date Begin</th>-->
+<!--        <th>Date End</th>-->
+<!--      </tr>-->
+<!--    </ng-template>-->
+<!--    <ng-template pTemplate="body" let-report>-->
+<!--      <tr>-->
+<!--        <td>{{ report.systemName }}</td>-->
+<!--        <td>{{ report.objectName }}</td>-->
+<!--        <td>{{ report.dataCode }}</td>-->
+<!--        <td>{{ report.dateBegin }}</td>-->
+<!--        <td>{{ report.dateEnd }}</td>-->
+<!--      </tr>-->
+<!--    </ng-template>-->
+<!--  </p-table>-->
+<!--</div>-->
+
+
+
+<!-- report-history.component.html -->
+<!--<div class="card">-->
+<!--  <p-table [value]="reports" [paginator]="true" [rows]="10">-->
+<!--    <ng-template pTemplate="header">-->
+<!--      <tr>-->
+<!--        <th>Date <i class="pi pi-filter"></i></th>-->
+<!--        <th>User <i class="pi pi-filter"></i></th>-->
+<!--        <th>System Name <i class="pi pi-filter"></i></th>-->
+<!--        <th>Object Name <i class="pi pi-filter"></i></th>-->
+<!--        <th>Data Code <i class="pi pi-filter"></i></th>-->
+<!--        <th>Date Begin <i class="pi pi-filter"></i></th>-->
+<!--        <th>Date End <i class="pi pi-filter"></i></th>-->
+<!--        <th>Status <i class="pi pi-filter"></i></th>-->
+<!--        <th>Download</th>-->
+<!--      </tr>-->
+<!--    </ng-template>-->
+<!--    <ng-template pTemplate="body" let-item>-->
+<!--      <tr>-->
+<!--        <td>{{ item.date }}</td>-->
+<!--        <td>{{ item.user }}</td>-->
+<!--        <td>{{ item.systemName }}</td>-->
+<!--        <td>{{ item.objectName }}</td>-->
+<!--        <td>{{ item.dataCode }}</td>-->
+<!--        <td>{{ item.dateBegin }}</td>-->
+<!--        <td>{{ item.dateEnd }}</td>-->
+<!--        <td>{{ item.status }}</td>-->
+<!--        <td><a [href]="item.download">Download</a></td>-->
+<!--      </tr>-->
+<!--    </ng-template>-->
+<!--  </p-table>-->
+<!--  <p-paginator [rowsPerPageOptions]="[5, 10, 20]" [first]="0"></p-paginator>-->
+<!--</div>-->
+<!--<p-table [value]="reports">-->
+<!--  <ng-template pTemplate="header">--><!--    <tr>-->
+<!--      <th>Дата запуска</th>--><!--      <th>User</th>-->
+<!--      <th>System Name</th>--><!--      <th>Object Name</th>-->
+<!--      <th>Data Code</th>--><!--      <th>Date Begin</th>-->
+<!--      <th>Date End</th>--><!--      <th>Статус</th>-->
+<!--      <th>Скачать</th>--><!--    </tr>-->
+<!--  </ng-template>--><!--  <ng-template pTemplate="body" let-report>-->
+<!--    <tr>--><!--      <td>{{ report.date }}</td>-->
+<!--      <td>{{ report.user }}</td>--><!--      <td>{{ report.systemName }}</td>-->
+<!--      <td>{{ report.objectName }}</td>--><!--      <td>{{ report.dataCode }}</td>-->
+<!--      <td>{{ report.dateBegin }}</td>--><!--      <td>{{ report.dateEnd }}</td>-->
+<!--      <td>{{ report.status }}</td>--><!--      <td><a class="download-link" href="{{ report.downloadUrl }}">📥</a></td>-->
+<!--    </tr>--><!--  </ng-template>-->
+<!--</p-table>--><!--<section class="report-history">-->
+<!--  <h2>История запуска отчета</h2>--><!--  <table>-->
+<!--    <thead>--><!--    <tr>-->
+<!--      <th binding="date">Дата запуска</th>--><!--      <th>User</th>-->
+<!--      <th>System Name</th>--><!--      <th>Object Name</th>-->
+<!--      <th>Data Code</th>--><!--      <th>Date Begin</th>-->
+<!--      <th>Date
+
+End</th>--><!--      <th>Статус</th>-->
+<!--      <th>Скачать</th>--><!--    </tr>-->
+<!--    </thead>--><!--    <tbody>-->
+<!--    <tr>-->
+<!--      <td>01.05.2024 13:38:23</td>--><!--      <td>Иванов Иван</td>-->
+<!--      <td>system_name</td>--><!--      <td>object_name</td>-->
+<!--      <td>789456</td>--><!--      <td>01.01.2022 00:00:00</td>-->
+<!--      <td>01.01.2023 00:00:00</td>--><!--      <td></td>-->
+<!--      <td><a class="download-link">📥</a></td>--><!--    </tr>-->
+<!--    </tbody>--><!--  </table>-->
+<!--</section>-->
+<!--<section class="report-params">-->
+<!--  <h2>Параметры запуска отчёта</h2>--><!--  <form>-->
+<!--    <label for="system_name">System Name:</label>--><!--    <input type="text" id="system_name" name="system_name">-->
+<!--    <label for="object_name">Object Name:</label>--><!--    <input type="text" id="object_name" name="object_name">-->
+<!--    <label for="data_code">Data Code:</label>--><!--    <input type="text" id="data_code" name="data_code">-->
+<!--    <label for="date_begin">Date Begin:</label>--><!--    <input type="date" id="date_begin" name="date_begin">-->
+<!--    <label for="date_end">Date End:</label>--><!--    <input type="date" id="date_end" name="date_end">-->
+<!--    <div class="jqx-fill-state-focus-energyblue">--><!--      <button class="btn btn-secondary smlbtn reset">Сброс</button>-->
+<!--      <button type="submit" class="btn btn-primary smlbtn launch">Запустить отчёт</button>--><!--    </div>-->
+<!--  </form>--><!--</section>-->
+<!--<section class="report_history">--><!--  <h2>История запуска отчётов</h2>-->
+<!--  <table>--><!--    <thead>-->
+<!--    <tr>--><!--      <th>Дата запуска</th>-->
+<!--      <th>user</th>--><!--      <th>system_name</th>-->
+<!--      <th>object_name</th>--><!--      <th>data_code</th>-->
+<!--      <th>date_begin</th>--><!--      <th>date_end</th>-->
+<!--      <th>Статус</th>--><!--      <th>Скачать</th>-->
+<!--    </tr>-->
+<!--    </thead>--><!--    <tbody>-->
+<!--    <tr>--><!--      <td>01.05.2024 13:38:23</td>-->
+<!--      <td>Иванов Иван</td>--><!--      <td>system_name</td>-->
+<!--      <td>object_name</td>--><!--      <td>789456</td>-->
+<!--      <td>01.01.2022 00:00:00</td>--><!--      <td>01.01.2023 00:00:00</td>-->
+<!--      <td>Wait</td>-->
+<!--      <td>--><!--        <button></button>-->
+<!--      </td>--><!--    </tr>-->
+<!--    </tbody>--><!--  </table>-->
+<!--</section>-->
+<!--<div class="collection">-->
+<!--  <div class="collection-header">--><!--    <div>Launch date</div>-->
+<!--    <div>user</div>--><!--    <div>system_name</div>-->
+<!--    <div>object_name</div>--><!--    <div>data_code</div>-->
+<!--    <div>date_begin</div>-->
+<!--    <div>date_end</div>--><!--    <div>Status</div>-->
+<!--    <div>Download</div>--><!--  </div>-->
+<!--</div>-->
+
+
+<!--<section class="report-params">-->
+<!--  <h2>Параметры запуска отчёта</h2>-->
+<!--  <form (submit)="onSubmit()">-->
+<!--    <label for="system_name">System Name:</label>-->
+<!--    <input type="text" id="system_name" name="system_name" [(ngModel)]="systemName">-->
+<!--    <label for="object_name">Object Name:</label>-->
+<!--    <input type="text" id="object_name" name="object_name" [(ngModel)]="objectName">-->
+<!--    <label for="data_code">Data Code:</label>-->
+<!--    <input type="text" id="data_code" name="data_code" [(ngModel)]="dataCode">-->
+<!--    <label for="date_begin">Date Begin:</label>-->
+<!--    <input type="date" id="date_begin" name="date_begin" [(ngModel)]="dateBegin">-->
+<!--    <label for="date_end">Date End:</label>-->
+<!--    <input type="date" id="date_end" name="date_end" [(ngModel)]="dateEnd">-->
+<!--    <button type="submit">Запустить отчёт</button>-->
+<!--    <button type="submit">Сброс</button>-->
+<!--  </form>-->
+<!--</section>-->
+<!--<section class="report-history">-->
+<!--  <h2>История запуска отчета</h2>-->
+<!--  <table>-->
+<!--    <thead>-->
+<!--    <tr>-->
+<!--      <th>Дата запуска</th>-->
+<!--      <th>User</th>-->
+<!--      <th>System Name</th>-->
+<!--      <th>Object Name</th>-->
+<!--      <th>Data Code</th>-->
+<!--      <th>Date Begin</th>-->
+<!--      <th>Date End</th>-->
+<!--      <th>Статус</th>-->
+<!--      <th>Скачать</th>-->
+<!--    </tr>-->
+<!--    </thead>-->
+<!--    <tbody>-->
+<!--    <tr *ngFor="let report of reports">-->
+<!--      <td>{{ report.date }}</td>-->
+<!--      <td>{{ report.user }}</td>-->
+<!--      <td>{{ report.systemName }}</td>-->
+<!--      <td>{{ report.objectName }}</td>-->
+<!--      <td>{{ report.dataCode }}</td>-->
+<!--      <td>{{ report.dateBegin }}</td>-->
+<!--      <td>{{ report.dateEnd }}</td>-->
+<!--      <td>{{ report.status }}</td>-->
+<!--      <td><a class="download-link" href="{{ report.downloadUrl }}">📥</a></td>-->
+<!--    </tr>-->
+<!--    </tbody>-->
+<!--  </table>-->
+<!--</section>-->
+

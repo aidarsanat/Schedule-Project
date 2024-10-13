@@ -1,0 +1,11 @@
+Backend
+
+http://localhost:5000/api/student
+
+http://api.schedule.com/api/auth/login
+
+Frontend
+
+http://localhost:5000/api/auth/login
+
+/api/student

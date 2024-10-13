@@ -1,0 +1,34 @@
+<div class="page-title">
+  <h4>Студенты</h4>
+  <button
+    class="waves-effect waves-light btn grey darken-1"
+    routerLink="/student/new"
+  >
+    Добавить студента
+  </button>
+</div>
+
+<div
+  class="row"
+  *ngIf = "students$ | async as students; else loader"
+>
+  <div class="col s12">
+    <div class="collection" *ngIf="students.length !==0; else empty">
+      <a
+        *ngFor="let student of students"
+        [routerLink] = "['/student', student._id]"
+        class="collection-item">
+        {{student.name}}
+      </a>
+    </div>
+    <ng-template #empty>
+      <div class="center">
+        Отсутствуют студенты. Добавьте студентов в список
+      </div>
+    </ng-template>
+  </div>
+</div>
+
+<ng-template #loader>
+  <app-loader></app-loader>
+</ng-template>

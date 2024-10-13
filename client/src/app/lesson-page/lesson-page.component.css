@@ -1,0 +1,44 @@
+.ar {
+  float: right;
+}
+
+
+/* lesson-page.component.css */
+
+.collection-header {
+  display: flex;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+
+.lesson-header {
+  flex: 1;
+  font-weight: bold;
+  text-align: left;
+  margin-left: 10px
+}
+
+.action-header {
+  text-align: right;
+  margin-right: 10px/* Выравнивание по правому краю для действий */
+}
+
+.lesson-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.lesson-name, .lesson-description, .lesson-actions {
+  flex: 1;
+  text-align: left;
+  margin-left: 10px
+}
+
+.lesson-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 10px
+}
